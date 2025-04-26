@@ -1,27 +1,13 @@
-# Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -O2
+CFLAGS = -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wnull-dereference -Wdouble-promotion -Wformat=2
 
-# Object files stored in BUILD_DIR
-# (patsubst pattern, replacement, text)
-OBJ = $(patsubst %.c, $(BUILD_DIR)/%.o, $(SRC))
+# Default build target
+all:
+	$(CC) $(CFLAGS) -o $(EXEC) $(SRC)
 
-# Default target
-all: $(EXE)
-
-# Ensure the build directory exists, then link object files into the executable
-$(EXE): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
-
-# Rule to compile source files into object files inside BUILD_DIR
-$(BUILD_DIR)/%.o: %.c
-	@mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Clean up build files
+# Clean target to delete object files and executables
 clean:
-	rm -rf *.exe
-	@echo "Cleaned up: $(EXE)"
+	rm -f *.o *.exe$(EXEC)
 
-# Phony targets
-.PHONY: all clean
+# Commands to run this makefile:
+# make EXEC=executable_name SRC=filename.c	
